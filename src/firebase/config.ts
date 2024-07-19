@@ -1,16 +1,16 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"
+import { FirebaseOptions, initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCTOoWB4qa_qo7cupLpB-NGxLca5LUika4",
-  authDomain: "novix-799e5.firebaseapp.com",
-  projectId: "novix-799e5",
-  storageBucket: "novix-799e5.appspot.com",
-  messagingSenderId: "313755657322",
-  appId: "1:313755657322:web:a7418fc9d7f4998f301613"
+const firebaseConfig: FirebaseOptions = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
-export const database = getFirestore(app)
+export const auth = getAuth(app);
+export const database = getFirestore(app);

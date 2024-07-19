@@ -5,19 +5,20 @@ import Container from "../components/Container";
 import { useCollection } from "../hooks/firebase";
 import { ApartmentsSkeleton } from "../components/Skeleton";
 import { Button } from "../components/ui/button";
+import { IApartment } from "../types";
 const Apartments = () => {
   const [searchParams] = useSearchParams();
   const {
     data: apartments,
     isLoading,
     isError,
-  } = useCollection("apartments", searchParams);
+  } = useCollection<IApartment>("apartments", searchParams);
   let mainContent;
   if (isLoading) mainContent = <ApartmentsSkeleton />;
   if (isError) mainContent = <p>Something went wrong. Try again</p>;
-  if (!isLoading && apartments?.length > 0)
+  if (!isLoading && apartments && apartments?.length > 0)
     mainContent = <ApartmentsList apartments={apartments} />;
-  if (!isLoading && apartments?.length == 0)
+  if (!isLoading && apartments && (apartments?.length == 0))
     mainContent = <p>No apartments match your query</p>;
 
   return (
@@ -38,7 +39,7 @@ export default Apartments;
 
 const Hero = () => {
   return (
-    <div className="h-[400px] bg-cover bg-no-repeat bg-top bg-[url('/public/images/home-bg.jpg')]">
+    <div className="h-[400px] bg-cover bg-no-repeat bg-top bg-[url('/images/home-bg.jpg')]">
       <Container>
         <h1 className="text-5xl text-white font-bold pt-28">
           Let's find you the

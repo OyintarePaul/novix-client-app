@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPrice(price: string) {
+export function formatPrice(price: number | undefined) {
+  if (!price) return "";
   const formattedPrice = new Intl.NumberFormat().format(parseInt(price));
   return "₦" + formattedPrice;
 }

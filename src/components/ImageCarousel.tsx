@@ -12,7 +12,7 @@ const ImageCarousel = ({ images }) => {
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>
-            <img src={image} className="w-full object-cover" />
+            <img src={image} className="w-full h-full object-cover" />
           </CarouselItem>
         ))}
       </CarouselContent>

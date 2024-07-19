@@ -11,20 +11,24 @@ import ImageCarousel from "./ImageCarousel";
 import { Link } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Bed, Lightbulb, Star, Waves } from "lucide-react";
-import { Button } from "./ui/button";
+import { IApartment } from "../types";
 
 const ApartmentCard = ({
   apartment: {
-    id,
     title,
+    location,
     price,
     images,
-    location,
+    id,
     rating,
     has_light,
     has_water,
     type,
   },
+  horizontal = false,
+}: {
+  apartment: IApartment;
+  horizontal: boolean;
 }) => {
   return (
     <Card className="rounded-md h-full">
@@ -33,7 +37,7 @@ const ApartmentCard = ({
       </div>
       <CardHeader className="space-y-0">
         <CardTitle className="text-lg flex justify-between items-center">
-          <Link to={id}>{title}</Link>
+          <Link to={`/apartments/${id}`}>{title}</Link>
           <Badge>
             <Star className="mr-2 w-4 h-4" /> {rating}
           </Badge>

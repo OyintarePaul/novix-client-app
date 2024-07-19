@@ -80,14 +80,17 @@ export const useCollection = <T>(
   });
 };
 
-export const useDocumentData = (collectionName: string, documentID: string) => {
+export const useDocumentData = <T>(
+  collectionName: string,
+  documentID: string
+) => {
   const getDocData = async () => {
     const docRef = doc(database, collectionName, documentID);
     const snapshot = await getDoc(docRef);
     if (!snapshot.exists()) {
       throw new Error("Apartment does not exist...");
     }
-    const result = { id: snapshot.id, ...snapshot.data() };
+    const result = { id: snapshot.id, ...snapshot.data() } as T;
     return result;
   };
   return useQuery({

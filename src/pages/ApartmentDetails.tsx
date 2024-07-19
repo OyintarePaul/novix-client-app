@@ -4,6 +4,8 @@ import { formatPrice } from "../lib/utils";
 import Container from "../components/Container";
 import { Bed, Heart, House, Ruler, ShieldPlus } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { IApartment } from "../types";
+import RelatedApartments from "../components/RelatedApartments";
 
 const features = [
   {
@@ -34,23 +36,39 @@ const ApartmentDetails = () => {
     data: apartment,
     isLoading,
     isError,
-  } = useDocumentData("apartments", apartmentID!);
+  } = useDocumentData<IApartment>("apartments", apartmentID!);
   if (isLoading) return <p>Loading, please wait...</p>;
   if (isError) return <p>Error... Something went wrong</p>;
-  return (
-    <Container>
-      <div className="md:flex gap-4 mt-6">
-        <div id="col-1" className="flex flex-col gap-6">
-          <div>
-            <img
-              src={apartment?.images[0]}
-              className="object-center object-cover w-full h-[350px] rounded-lg"
-            />
+  if (apartment)
+    return (
+      <Container>
+        <div className="flex flex-col gap-6">
+          <div className="h-[350px] flex gap-2">
+            <div className="w-3/4">
+              <img
+                src={apartment.images[0]}
+                className="object-center object-cover w-full h-full"
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-1/4">
+              <div className="h-1/2 w-full">
+                <img
+                  src={apartment.images[1]}
+                  className="object-center object-cover w-full h-full"
+                />
+              </div>
+              <div className="h-1/2 w-full">
+                <img
+                  src={apartment.images[0]}
+                  className="object-center object-cover w-full h-full"
+                />
+              </div>
+            </div>
           </div>
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-xl font-bold">{apartment?.title}</p>
-              <p className="text-gray-600">{apartment?.location}</p>
+              <p className="text-xl font-bold">{apartment.title}</p>
+              <p className="text-gray-600">{apartment.location}</p>
             </div>
             <p className="text-xl font-bold">
               {formatPrice(apartment.price)}
@@ -73,7 +91,7 @@ const ApartmentDetails = () => {
 
           <div>
             <h3 className="text-xl font-semibold">Description</h3>
-            <p className="text-gray-600">{apartment.description}</p>
+            <p className="text-gray-600">{apartment?.description}</p>
           </div>
 
           <div className="flex gap-4">
@@ -83,17 +101,23 @@ const ApartmentDetails = () => {
             </Button>
           </div>
         </div>
-        <div className="w-1/4">
-          Someother content will go here later. I don tire abeg
+        <div>
+          <RelatedApartments apartment={apartment} />
         </div>
-      </div>
-    </Container>
-  );
+      </Container>
+    );
 };
 
 export default ApartmentDetails;
 
-function interpretFeature(apartment, feature) {
+function interpretFeature(
+  apartment: IApartment,
+  feature: {
+    key: string;
+    icon: JSX.Element;
+    label: string;
+  }
+) {
   if (feature.key == "number_of_bedrooms") {
     return apartment.number_of_bedrooms + " Bedrooms";
   }
