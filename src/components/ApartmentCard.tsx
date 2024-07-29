@@ -25,17 +25,16 @@ const ApartmentCard = ({
     has_water,
     type,
   },
-  horizontal = false,
 }: {
   apartment: IApartment;
   horizontal: boolean;
 }) => {
   return (
     <Card className="rounded-md h-full">
-      <div className="h-40 overflow-hidden flex justify-center items-center">
-        <ImageCarousel images={images} />
+      <div className="h-52 overflow-hidden flex justify-center items-center">
+        <img src={images[0]} className="w-full h-full object-cover" />
       </div>
-      <CardHeader className="space-y-0">
+      <CardHeader className="pt-4">
         <CardTitle className="text-lg flex justify-between items-center">
           <Link to={`/apartments/${id}`}>{title}</Link>
           <Badge>

@@ -9,7 +9,7 @@ import {
 import { Button } from "./ui/button";
 
 const ApartmentFilters = () => {
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const handleSelectChange = (name: string, value: string) => {
     setSearchParams((prev) => {
       prev.set(name, value);
@@ -20,21 +20,23 @@ const ApartmentFilters = () => {
   return (
     <div className="flex gap-4 my-6">
       <Select
+        value={searchParams.get("price") || ""}
         onValueChange={(value: string) => handleSelectChange("price", value)}
       >
         <SelectTrigger>
           <SelectValue placeholder="Price" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="<60000">Less than 60,000</SelectItem>
+          <SelectItem value="0-60000">Less than 60,000</SelectItem>
           <SelectItem value="60000-100000">60,000 - 100,000</SelectItem>
           <SelectItem value="100000-150000">100,000 - 150,000</SelectItem>
           <SelectItem value="150000-200000">150,000 - 200,000</SelectItem>
           <SelectItem value="200000-250000">200,000 - 250,000</SelectItem>
-          <SelectItem value=">250000">More than 250,000</SelectItem>
+          <SelectItem value="250000-500000">More than 250,000</SelectItem>
         </SelectContent>
       </Select>
       <Select
+        value={searchParams.get("type") || ""}
         onValueChange={(value: string) => handleSelectChange("type", value)}
       >
         <SelectTrigger>
@@ -49,6 +51,7 @@ const ApartmentFilters = () => {
         </SelectContent>
       </Select>
       <Select
+        value={searchParams.get("has_water") || ""}
         onValueChange={(value: string) =>
           handleSelectChange("has_water", value)
         }
@@ -62,6 +65,7 @@ const ApartmentFilters = () => {
         </SelectContent>
       </Select>
       <Select
+        value={searchParams.get("has_light") || ""}
         onValueChange={(value: string) =>
           handleSelectChange("has_light", value)
         }

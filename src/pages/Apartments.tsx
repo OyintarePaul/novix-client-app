@@ -6,19 +6,24 @@ import { useCollection } from "../hooks/firebase";
 import { ApartmentsSkeleton } from "../components/Skeleton";
 import { Button } from "../components/ui/button";
 import { IApartment } from "../types";
+import { useEffect } from "react";
 const Apartments = () => {
   const [searchParams] = useSearchParams();
   const {
     data: apartments,
     isLoading,
     isError,
+    error,
   } = useCollection<IApartment>("apartments", searchParams);
+  useEffect(() => {
+    if (error) console.log(error.message);
+  });
   let mainContent;
   if (isLoading) mainContent = <ApartmentsSkeleton />;
   if (isError) mainContent = <p>Something went wrong. Try again</p>;
   if (!isLoading && apartments && apartments?.length > 0)
     mainContent = <ApartmentsList apartments={apartments} />;
-  if (!isLoading && apartments && (apartments?.length == 0))
+  if (!isLoading && apartments && apartments?.length == 0)
     mainContent = <p>No apartments match your query</p>;
 
   return (

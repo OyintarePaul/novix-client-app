@@ -21,7 +21,7 @@ const features = [
   {
     key: "distance_to_campus",
     icon: <Ruler color="white" />,
-    label: "Distance from campus",
+    label: "Distance to campus",
   },
   {
     key: "security_level",

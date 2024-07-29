@@ -8,12 +8,9 @@ import {
 import {
   getDocs,
   collection,
-  QuerySnapshot,
   doc,
   getDoc,
   query,
-  where,
-  QueryFieldFilterConstraint,
 } from "firebase/firestore";
 import { auth, database } from "../../firebase/config";
 import { useToast } from "../../components/ui/use-toast";

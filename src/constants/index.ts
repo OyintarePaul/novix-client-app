@@ -1,17 +1,32 @@
-export const navItems = [{
+export const navItems = [
+  {
     path: "/blog",
     label: "Blog",
-},
-{
+  },
+  {
     path: "/apartments",
-    label: "Apartments"
-},
-{
+    label: "Apartments",
+  },
+  {
     path: "/learn",
-    label: "Learn"
-},
-{
+    label: "Learn",
+  },
+  {
     path: "/map",
-    label: "Map"
-}
-]
+    label: "Map",
+  },
+];
+export const adminNavItems = [
+  {
+    path: "/admin/posts",
+    label: "Posts",
+  },
+  {
+    path: "/admin/apartments",
+    label: "Apartments",
+  },
+  {
+    path: "/admin/course-materials",
+    label: "Course Materials",
+  },
+];

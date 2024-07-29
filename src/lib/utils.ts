@@ -26,5 +26,10 @@ export function getQueriesFromSearchParams(
   if (params.has("has_light")) {
     queries.push(where("has_light", "==", params.get("has_light")));
   }
+  if (params.has("price")) {
+    const [from, to] = params.get("price")?.split("-") as [string, string];
+    queries.push(where("price", ">=", parseInt(from)));
+    queries.push(where("price", "<=", parseInt(to)));
+  }
   return queries;
 }
