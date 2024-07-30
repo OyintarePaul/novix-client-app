@@ -25,6 +25,7 @@ export interface IApartment {
   security_level: FivePointScale;
   room_size: number;
   created_at: string;
+  media: string[];
 }
 
 type FivePointScale = 1 | 2 | 3 | 4 | 5;

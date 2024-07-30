@@ -6,6 +6,7 @@ import { Bed, Heart, House, Ruler, ShieldPlus } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { IApartment } from "../types";
 import RelatedApartments from "../components/RelatedApartments";
+import FirebaseImage from "../components/FirebaseImage";
 
 const features = [
   {
@@ -14,7 +15,7 @@ const features = [
     label: "Room Size",
   },
   {
-    key: "number_of_bedrooms",
+    key: "number_of_rooms",
     icon: <Bed color="white" />,
     label: "Number of Bedrooms",
   },
@@ -45,21 +46,21 @@ const ApartmentDetails = () => {
         <div className="flex flex-col gap-6">
           <div className="h-[350px] flex gap-2">
             <div className="w-3/4">
-              <img
-                src={apartment.images[0]}
+              <FirebaseImage
+                imageRef={apartment.media[0]}
                 className="object-center object-cover w-full h-full"
               />
             </div>
             <div className="flex flex-col gap-2 w-1/4">
               <div className="h-1/2 w-full">
-                <img
-                  src={apartment.images[1]}
+                <FirebaseImage
+                  imageRef={apartment.media[1] || apartment.media[0]}
                   className="object-center object-cover w-full h-full"
                 />
               </div>
               <div className="h-1/2 w-full">
-                <img
-                  src={apartment.images[0]}
+                <FirebaseImage
+                  imageRef={apartment.media[2] || apartment.media[0]}
                   className="object-center object-cover w-full h-full"
                 />
               </div>
@@ -118,8 +119,8 @@ function interpretFeature(
     label: string;
   }
 ) {
-  if (feature.key == "number_of_bedrooms") {
-    return apartment.number_of_bedrooms + " Bedrooms";
+  if (feature.key == "number_of_rooms") {
+    return apartment.number_of_rooms + " Bedrooms";
   }
   if (feature.key == "room_size") return apartment.room_size;
   if (feature.key == "security_level") {

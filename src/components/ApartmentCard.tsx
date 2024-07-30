@@ -7,18 +7,18 @@ import {
   CardTitle,
 } from "./ui/card";
 import { formatPrice } from "../lib/utils";
-import ImageCarousel from "./ImageCarousel";
 import { Link } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Bed, Lightbulb, Star, Waves } from "lucide-react";
 import { IApartment } from "../types";
+import FirebaseImage from "./FirebaseImage";
 
 const ApartmentCard = ({
   apartment: {
     title,
     location,
     price,
-    images,
+    media,
     id,
     rating,
     has_light,
@@ -32,7 +32,10 @@ const ApartmentCard = ({
   return (
     <Card className="rounded-md h-full">
       <div className="h-52 overflow-hidden flex justify-center items-center">
-        <img src={images[0]} className="w-full h-full object-cover" />
+        <FirebaseImage
+          imageRef={media[0]}
+          className="w-full h-full object-cover"
+        />
       </div>
       <CardHeader className="pt-4">
         <CardTitle className="text-lg flex justify-between items-center">

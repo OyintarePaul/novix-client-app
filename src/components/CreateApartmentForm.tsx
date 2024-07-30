@@ -19,10 +19,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Textarea } from "./ui/textarea";
+import { Checkbox } from "./ui/checkbox";
+import { useMutation } from "@tanstack/react-query";
+import { addApartmentToFirestore } from "../firebase/utils";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "./ui/use-toast";
 
 const formSchema = z.object({
   title: z.string({ message: "Please, enter a title" }),
-  price: z.string({ message: "Please enter a price" }),
+  price: z.number({ message: "Please enter a price" }),
   description: z.string().min(10, {
     message: "Please enter a description greater than 50 characters",
   }),
@@ -31,16 +37,36 @@ const formSchema = z.object({
   rating: z.string({ message: "Select a rating" }),
   number_of_rooms: z.string({ message: "Please select number of rooms" }),
   agent_fee: z.string({ message: "Please, enter agent's fee" }),
+  media: z.any({ message: "Please select at least one image" }),
+  has_water: z.boolean(),
+  has_light: z.boolean(),
+  lease_term: z.number(),
+  landlord_name: z.string(),
+  landlord_phone_number: z.string(),
 });
 
 const CreateApartmentForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      has_light: false,
+      has_water: false,
+    },
+  });
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: addApartmentToFirestore,
+    onSuccess: () => {
+      navigate(-1);
+      toast({ title: "Apartment added to firebase like a breeze" });
+    },
+    onError: (err) => console.error(err),
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    mutate(values);
   }
   return (
     <Form {...form}>
@@ -64,13 +90,14 @@ const CreateApartmentForm = () => {
         <FormField
           control={form.control}
           name="price"
-          render={({ field }) => (
+          render={({ field: { onChange, ...rest } }) => (
             <FormItem>
               <FormLabel>Price</FormLabel>
               <FormControl>
                 <Input
+                  onChange={(e) => onChange(parseInt(e.target.value))}
                   placeholder="Enter the apartment's price per year excluding agent's fee"
-                  {...field}
+                  {...rest}
                   type="number"
                 />
               </FormControl>
@@ -202,7 +229,117 @@ const CreateApartmentForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="media"
+          render={({ field: { value, onChange, ...fieldProps } }) => (
+            <FormItem>
+              <FormLabel>Select Images</FormLabel>
+              <FormControl>
+                <Input
+                  {...fieldProps}
+                  multiple
+                  placeholder="Images and Videos"
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={(event) =>
+                    onChange(event.target.files && event.target.files)
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="has_water"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>This apartment has water</FormLabel>
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="has_light"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel>This apartment has light</FormLabel>
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lease_term"
+          render={({ field: { onChange, ...rest } }) => (
+            <FormItem>
+              <FormLabel>Lease Term</FormLabel>
+              <FormControl>
+                <Input
+                  onChange={(e) => onChange(parseInt(e.target.value))}
+                  placeholder="Enter a lease term between one to five"
+                  {...rest}
+                  type="number"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="landlord_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Landlord's name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="The name of the landlord of the apartment"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="landlord_phone_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Landlord's Phone number</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="The phone number of the landlord of the apartment"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Submit
+        </Button>
       </form>
     </Form>
   );
